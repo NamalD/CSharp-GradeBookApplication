@@ -18,27 +18,21 @@ namespace GradeBook.GradeBooks
             }
 
             // For every 20% of students that have a lower average, the grade rises by 1 position
-            var studentsPerGradeIncrease = Students.Count / 5;
+            var gradeThreshold = Students.Count / 5;
             var currentLetterGrade = 'F';
             var studentIndex = 0;
-            var studentsWithLowerGrade = 0;
+            var lowerGradeCount = 0;
             while (currentLetterGrade > 'A' && studentIndex < Students.Count)
             {
                 // Keep track of how many students have a lower grade, which we use to calculate relative grade
                 var comparisonGrade = Students[studentIndex].AverageGrade;
-                if (comparisonGrade <= averageGrade)
+                if (comparisonGrade < averageGrade || (comparisonGrade == averageGrade && currentLetterGrade != 'F'))
                 {
-                    // The average grade must be higher if the current letter grade is F to give a grade increase
-                    if (comparisonGrade == averageGrade && currentLetterGrade == 'F')
-                    {
-                        continue;
-                    }
-
-                    studentsWithLowerGrade++;
-                    if (studentsWithLowerGrade >= studentsPerGradeIncrease)
+                    lowerGradeCount++;
+                    if (lowerGradeCount == gradeThreshold)
                     {
                         currentLetterGrade--; // Decrement grade char to get a 'higher' grade (e.g. 'F' to 'E')
-                        studentsWithLowerGrade = 0; // Reset count to prepare for next grade
+                        lowerGradeCount = 0; // Reset count to prepare for next threshold check
                     }
                 }
                 studentIndex++;
