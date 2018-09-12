@@ -25,8 +25,15 @@ namespace GradeBook.GradeBooks
             while (currentLetterGrade > 'A' && studentIndex < Students.Count)
             {
                 // Keep track of how many students have a lower grade, which we use to calculate relative grade
-                if (Students[studentIndex].AverageGrade < averageGrade)
+                var comparisonGrade = Students[studentIndex].AverageGrade;
+                if (comparisonGrade <= averageGrade)
                 {
+                    // The average grade must be higher if the current letter grade is F to give a grade increase
+                    if (comparisonGrade == averageGrade && currentLetterGrade == 'F')
+                    {
+                        continue;
+                    }
+
                     studentsWithLowerGrade++;
                     if (studentsWithLowerGrade >= studentsPerGradeIncrease)
                     {
